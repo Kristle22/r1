@@ -1,0 +1,86 @@
+nav.nav {
+  background-color: aliceblue;
+}
+
+body {
+  font-family: 'Mali', cursive;
+}
+.list-group-item {
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    .content {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    b {
+      margin-right: 7px;
+    }
+    i,
+    u {
+      margin-left: 7px;
+    }
+  }
+}
+.list-group-item {
+  .item-front {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    .content {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+  }
+}
+
+.modal {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.show-message {
+  display: flex;
+  position: absolute;
+  bottom: 50px;
+  right: 30px;
+  width: 100%;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 9;
+  .alert-danger {
+    background-color: #f8d7dac2;
+  }
+  .alert-info {
+    background-color: #d1ecf1c2;
+  }
+  .alert-success {
+    background-color: #d4eddac2;
+  }
+  div {
+    width: 50%;
+  }
+}
+
+button.with-loader {
+  .spinner-border {
+    display: none;
+  }
+}
+button.with-loader:disabled {
+  .spinner-border {
+    display: inline-block;
+  }
+}
