@@ -15,7 +15,11 @@ function Back({ show }) {
   const [modalCat, setModalCat] = useState(null);
   const [editCat, setEditCat] = useState(null);
 
+  const [products, setProducts] = useState(null);
   const [createProduct, setCreateProduct] = useState(null);
+  const [deleteProduct, setDeleteProduct] = useState(null);
+  const [modalProduct, setModalProduct] = useState(null);
+  const [editProduct, setEditProduct] = useState(null);
 
   const [messages, setMessages] = useState([
     // { id: 4465, text: 'Jus pasiekete prekiu limita.', type: 'danger' },
@@ -27,7 +31,59 @@ function Back({ show }) {
     // { id: 8490, text: 'Sveikiname isigijus megstama preke!', type: 'success' },
   ]);
 
-  // Read CAT
+  // Read PRODUCTS
+  useEffect(() => {
+    axios.get('http://localhost:3003/adm/prekes').then((res) => {
+      setProducts(res.data);
+    });
+  }, [lastUpdate]);
+
+  //Create PRODUCT
+  useEffect(() => {
+    if (null === createProduct) return;
+    axios
+      .post('http://localhost:3003/adm/prekes', createProduct)
+      .then((res) => {
+        showMessage(res.data.msg);
+        console.log('res data', res.data);
+        setLastUpdate(Date.now());
+      })
+      .catch((error) => {
+        showMessage({ text: error.message, type: 'danger' });
+      });
+  }, [createProduct]);
+
+  //Delete PRODUCT
+  useEffect(() => {
+    if (null === deleteProduct) return;
+    axios
+      .delete('http://localhost:3003/adm/prekes/' + deleteProduct.id)
+      .then((res) => {
+        showMessage(res.data.msg);
+        console.log('res data', res.data);
+        setLastUpdate(Date.now());
+      })
+      .catch((error) => {
+        showMessage({ text: error.message, type: 'danger' });
+      });
+  }, [deleteProduct]);
+
+  //Edit PRODUCT
+  useEffect(() => {
+    if (null === editProduct) return;
+    axios
+      .put('http://localhost:3003/adm/prekes/' + editProduct.id, editProduct)
+      .then((res) => {
+        showMessage(res.data.msg);
+        console.log('res data', res.data);
+        setLastUpdate(Date.now());
+      })
+      .catch((error) => {
+        showMessage({ text: error.message, type: 'danger' });
+      });
+  }, [editProduct]);
+
+  // Read CATS
   useEffect(() => {
     axios.get('http://localhost:3003/adm/kategorijos').then((res) => {
       setCats(res.data);
@@ -40,29 +96,14 @@ function Back({ show }) {
     axios
       .post('http://localhost:3003/adm/kategorijos', createCat)
       .then((res) => {
-        showMessge(res.data.msg);
+        showMessage(res.data.msg);
         console.log('res data', res.data);
         setLastUpdate(Date.now());
       })
       .catch((error) => {
-        showMessge({ text: error.message, type: 'danger' });
+        showMessage({ text: error.message, type: 'danger' });
       });
   }, [createCat]);
-
-  //Create PRODUCT
-  useEffect(() => {
-    if (null === createProduct) return;
-    axios
-      .post('http://localhost:3003/adm/prekes', createProduct)
-      .then((res) => {
-        showMessge(res.data.msg);
-        console.log('res data', res.data);
-        setLastUpdate(Date.now());
-      })
-      .catch((error) => {
-        showMessge({ text: error.message, type: 'danger' });
-      });
-  }, [createProduct]);
 
   //Delete CAT
   useEffect(() => {
@@ -70,12 +111,12 @@ function Back({ show }) {
     axios
       .delete('http://localhost:3003/adm/kategorijos/' + deleteCat.id)
       .then((res) => {
-        showMessge(res.data.msg);
+        showMessage(res.data.msg);
         console.log('res data', res.data);
         setLastUpdate(Date.now());
       })
       .catch((error) => {
-        showMessge({ text: error.message, type: 'danger' });
+        showMessage({ text: error.message, type: 'danger' });
       });
   }, [deleteCat]);
 
@@ -85,16 +126,16 @@ function Back({ show }) {
     axios
       .put('http://localhost:3003/adm/kategorijos/' + editCat.id, editCat)
       .then((res) => {
-        showMessge(res.data.msg);
+        showMessage(res.data.msg);
         console.log('res data', res.data);
         setLastUpdate(Date.now());
       })
       .catch((error) => {
-        showMessge({ text: error.message, type: 'danger' });
+        showMessage({ text: error.message, type: 'danger' });
       });
   }, [editCat]);
 
-  const showMessge = (m) => {
+  const showMessage = (m) => {
     const id = uuidv4();
     m.id = id;
     setMessages((msg) => [...msg, m]);
@@ -114,6 +155,12 @@ function Back({ show }) {
         setModalCat,
         setEditCat,
         setCreateProduct,
+        products,
+        showMessage,
+        setDeleteProduct,
+        setEditProduct,
+        modalProduct,
+        setModalProduct,
       }}
     >
       {show === 'admin' ? (

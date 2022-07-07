@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import BackContext from '../BackContext';
 
 function Create() {
-  const { setCreateProduct, cats } = useContext(BackContext);
+  const { setCreateProduct, cats, showMessage } = useContext(BackContext);
 
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
@@ -10,6 +10,11 @@ function Create() {
   const [cat, setCat] = useState('0');
 
   const handleCreate = () => {
+    if (cat === '0') {
+      showMessage({ text: 'Please, select category!', type: 'danger' });
+      return;
+    }
+
     const data = {
       title,
       price: parseFloat(price),

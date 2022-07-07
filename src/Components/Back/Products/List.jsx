@@ -3,16 +3,18 @@ import BackContext from '../BackContext';
 import Line from './Line';
 
 function List() {
-  const { cats } = useContext(BackContext);
+  const { products } = useContext(BackContext);
 
   return (
     <div className='card mt-4'>
       <div className='card-header'>
-        <h2>List of Categories</h2>
+        <h2>List of Products</h2>
       </div>
       <div className='card-body'>
         <ul className='list-group'>
-          {cats ? cats.map((cat) => <Line key={cat.id} line={cat} />) : null}
+          {products
+            ? products.map((prod) => <Line key={prod.id} line={prod} />)
+            : null}
         </ul>
       </div>
     </div>

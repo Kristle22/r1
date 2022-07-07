@@ -2,23 +2,30 @@ import { useContext } from 'react';
 import BackContext from '../BackContext';
 
 function Line({ line }) {
-  const { setDeleteCat, setModalCat } = useContext(BackContext);
+  const { setDeleteProduct, setModalProduct } = useContext(BackContext);
 
   const handleModal = () => {
-    setModalCat(line);
+    setModalProduct(line);
   };
 
   const handleDelete = () => {
-    setDeleteCat(line);
+    setDeleteProduct(line);
   };
 
-  console.log(line);
+  // console.log(line);
 
   return (
     <li className='list-group-item'>
       <div className='item'>
         <div className='content'>
           <b>{line.title}</b>
+          <b>{line.price.toFixed(2)} Eur.</b>
+          <div
+            className='box'
+            style={{ backgroundColor: line.in_stock ? 'coral' : null }}
+          ></div>
+          <span>{new Date(Date.parse(line.lu)).toLocaleString()}</span>
+          <div className='cat'>{line.cat}</div>
         </div>
         <div className='buttons'>
           <button
