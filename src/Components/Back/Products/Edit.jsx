@@ -1,16 +1,51 @@
 import { useContext } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import BackContext from '../BackContext';
+import getBase64 from '../../../Functions/getBase64';
 
 function Edit() {
-  const { modalProduct, setModalProduct, setEditProduct, cats } =
-    useContext(BackContext);
+  const {
+    modalProduct,
+    setModalProduct,
+    setEditProduct,
+    cats,
+    showMessage,
+    setDeleteImg,
+  } = useContext(BackContext);
 
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [inStock, setInStock] = useState(false);
   const [cat, setCat] = useState('0');
   const [lu, setLu] = useState('');
+
+  const fileInput = useRef();
+  const [image, setImage] = useState(null);
+
+  const showImage = () => {
+    getBase64(fileInput.current.files[0])
+      .then((photo) => setImage(photo))
+      .catch((_) => {
+        showMessage({
+          text: 'Failo pasirinkimas atsauktas!',
+          type: 'danger',
+        });
+      });
+  };
+
+  // const removeImage = () => {
+  //   setImage(null);
+  //   showMessage({
+  //     text: 'Nuotrauka sekmingai istrinta!',
+  //     type: 'info',
+  //   });
+  // };
+
+  const removeImage = () => {
+    setDeleteImg({ id: modalProduct.id });
+    setModalProduct((p) => ({ ...p, photo: null }));
+    // setImage(null);
+  };
 
   const setDateFormat = (d) => {
     // yyyy-MM-ddThh:mm
@@ -34,6 +69,7 @@ function Edit() {
     setInStock(modalProduct.in_stock ? true : false);
     setLu(setDateFormat(modalProduct.lu));
     setCat(cats.filter((c) => (c.title = modalProduct.cat))[0].id);
+    setImage(modalProduct.photo);
   }, [modalProduct, cats]);
 
   const handleEdit = () => {
@@ -44,6 +80,7 @@ function Edit() {
       price: parseFloat(price),
       cat: parseInt(cat),
       lu: lu,
+      photo: image,
     };
     setEditProduct(data);
     setModalProduct(null);
@@ -56,10 +93,10 @@ function Edit() {
 
   return (
     <div className='modal'>
-      <div className='modal-dialog modal-dialog-centered'>
+      <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable'>
         <div className='modal-content'>
           <div className='modal-header'>
-            <h5 className='modal-title'>Change category name</h5>
+            <h5 className='modal-title'>Change Product info</h5>
             <button
               type='button'
               className='close'
@@ -137,6 +174,36 @@ function Edit() {
                 Select products Category here.
               </small>
             </div>
+            <div className='form-group'>
+              <label>Photo</label>
+              <input
+                ref={fileInput}
+                type='file'
+                className='form-control'
+                onChange={showImage}
+              />
+              <small className='form-text text-muted'>Upload Pfoto.</small>
+              <button
+                style={{
+                  width: 'fit-content',
+                  fontSize: '10px',
+                  backgroundColor: 'crimson',
+                  color: 'white',
+                  float: 'right',
+                  marginTop: '-20px',
+                }}
+                type='button'
+                className='btn btn-outline-danger ml-2'
+                onClick={removeImage}
+              >
+                Remove Photo
+              </button>
+            </div>
+            {image ? (
+              <div className='photo-bin'>
+                <img src={image} alt='product rendering...' />
+              </div>
+            ) : null}
             <div className='modal-footer'>
               <button
                 type='button'

@@ -18,6 +18,13 @@ function Line({ line }) {
     <li className='list-group-item'>
       <div className='item'>
         <div className='content'>
+          <div style={{ width: '25%', margin: '10px' }}>
+            {line.photo ? (
+              <div className='photo-bin'>
+                <img src={line.photo} alt={line.title} />
+              </div>
+            ) : null}
+          </div>
           <b>{line.title}</b>
           <b>{line.price.toFixed(2)} Eur.</b>
           <div

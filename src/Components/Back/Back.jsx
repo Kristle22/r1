@@ -21,6 +21,8 @@ function Back({ show }) {
   const [modalProduct, setModalProduct] = useState(null);
   const [editProduct, setEditProduct] = useState(null);
 
+  const [deleteImg, setDeleteImg] = useState(null);
+
   const [messages, setMessages] = useState([
     // { id: 4465, text: 'Jus pasiekete prekiu limita.', type: 'danger' },
     // {
@@ -67,6 +69,21 @@ function Back({ show }) {
         showMessage({ text: error.message, type: 'danger' });
       });
   }, [deleteProduct]);
+
+  //Delete IMAGE
+  useEffect(() => {
+    if (null === deleteImg) return;
+    axios
+      .delete('http://localhost:3003/adm/nuotrauka/' + deleteImg.id)
+      .then((res) => {
+        showMessage(res.data.msg);
+        console.log('res data', res.data);
+        // setLastUpdate(Date.now());
+      })
+      .catch((error) => {
+        showMessage({ text: error.message, type: 'danger' });
+      });
+  }, [deleteImg]);
 
   //Edit PRODUCT
   useEffect(() => {
@@ -161,6 +178,7 @@ function Back({ show }) {
         setEditProduct,
         modalProduct,
         setModalProduct,
+        setDeleteImg,
       }}
     >
       {show === 'admin' ? (
