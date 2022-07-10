@@ -12,8 +12,6 @@ function Line({ line }) {
     setDeleteProduct(line);
   };
 
-  // console.log(line);
-
   return (
     <li className='list-group-item'>
       <div className='item'>

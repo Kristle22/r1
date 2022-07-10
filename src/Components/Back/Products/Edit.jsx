@@ -85,6 +85,7 @@ function Edit() {
     setEditProduct(data);
     setModalProduct(null);
   };
+
   // console.log(new Date(lu).toISOString().slice(0, 19).replace('T', ' '));
 
   if (null === modalProduct) {
@@ -182,7 +183,7 @@ function Edit() {
                 className='form-control'
                 onChange={showImage}
               />
-              <small className='form-text text-muted'>Upload Pfoto.</small>
+              <small className='form-text text-muted'>Upload Photo.</small>
               <button
                 style={{
                   width: 'fit-content',

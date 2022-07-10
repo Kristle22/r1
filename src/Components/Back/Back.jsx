@@ -5,6 +5,7 @@ import ProductsCrud from './Products/Crud';
 import BackContext from './BackContext';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { authConfig } from '../../Functions/auth';
 
 function Back({ show }) {
   const [lastUpdate, setLastUpdate] = useState(Date.now());
@@ -35,7 +36,7 @@ function Back({ show }) {
 
   // Read PRODUCTS
   useEffect(() => {
-    axios.get('http://localhost:3003/adm/prekes').then((res) => {
+    axios.get('http://localhost:3003/adm/prekes', authConfig()).then((res) => {
       setProducts(res.data);
     });
   }, [lastUpdate]);
@@ -44,7 +45,7 @@ function Back({ show }) {
   useEffect(() => {
     if (null === createProduct) return;
     axios
-      .post('http://localhost:3003/adm/prekes', createProduct)
+      .post('http://localhost:3003/adm/prekes', createProduct, authConfig())
       .then((res) => {
         showMessage(res.data.msg);
         console.log('res data', res.data);
@@ -59,7 +60,10 @@ function Back({ show }) {
   useEffect(() => {
     if (null === deleteProduct) return;
     axios
-      .delete('http://localhost:3003/adm/prekes/' + deleteProduct.id)
+      .delete(
+        'http://localhost:3003/adm/prekes/' + deleteProduct.id
+        // authConfig()
+      )
       .then((res) => {
         showMessage(res.data.msg);
         console.log('res data', res.data);
@@ -74,7 +78,10 @@ function Back({ show }) {
   useEffect(() => {
     if (null === deleteImg) return;
     axios
-      .delete('http://localhost:3003/adm/nuotrauka/' + deleteImg.id)
+      .delete(
+        'http://localhost:3003/adm/nuotrauka/' + deleteImg.id,
+        authConfig()
+      )
       .then((res) => {
         showMessage(res.data.msg);
         console.log('res data', res.data);
@@ -89,7 +96,11 @@ function Back({ show }) {
   useEffect(() => {
     if (null === editProduct) return;
     axios
-      .put('http://localhost:3003/adm/prekes/' + editProduct.id, editProduct)
+      .put(
+        'http://localhost:3003/adm/prekes/' + editProduct.id,
+        editProduct,
+        authConfig()
+      )
       .then((res) => {
         showMessage(res.data.msg);
         console.log('res data', res.data);
@@ -102,16 +113,18 @@ function Back({ show }) {
 
   // Read CATS
   useEffect(() => {
-    axios.get('http://localhost:3003/adm/kategorijos').then((res) => {
-      setCats(res.data);
-    });
+    axios
+      .get('http://localhost:3003/adm/kategorijos', authConfig())
+      .then((res) => {
+        setCats(res.data);
+      });
   }, [lastUpdate]);
 
   //Create CAT
   useEffect(() => {
     if (null === createCat) return;
     axios
-      .post('http://localhost:3003/adm/kategorijos', createCat)
+      .post('http://localhost:3003/adm/kategorijos', createCat, authConfig())
       .then((res) => {
         showMessage(res.data.msg);
         console.log('res data', res.data);
@@ -126,7 +139,10 @@ function Back({ show }) {
   useEffect(() => {
     if (null === deleteCat) return;
     axios
-      .delete('http://localhost:3003/adm/kategorijos/' + deleteCat.id)
+      .delete(
+        'http://localhost:3003/adm/kategorijos/' + deleteCat.id,
+        authConfig()
+      )
       .then((res) => {
         showMessage(res.data.msg);
         console.log('res data', res.data);
@@ -141,7 +157,11 @@ function Back({ show }) {
   useEffect(() => {
     if (null === editCat) return;
     axios
-      .put('http://localhost:3003/adm/kategorijos/' + editCat.id, editCat)
+      .put(
+        'http://localhost:3003/adm/kategorijos/' + editCat.id,
+        editCat,
+        authConfig()
+      )
       .then((res) => {
         showMessage(res.data.msg);
         console.log('res data', res.data);
