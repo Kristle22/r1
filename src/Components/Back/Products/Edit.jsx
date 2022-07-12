@@ -68,7 +68,7 @@ function Edit() {
     setPrice(modalProduct.price);
     setInStock(modalProduct.in_stock ? true : false);
     setLu(setDateFormat(modalProduct.lu));
-    setCat(cats.filter((c) => (c.title = modalProduct.cat))[0].id);
+    setCat(cats.filter((c) => c.title === modalProduct.cat)[0].id);
     setImage(modalProduct.photo);
   }, [modalProduct, cats]);
 

@@ -3,10 +3,12 @@ import { useContext } from 'react';
 import FrontContext from './FrontContext';
 
 function SortFilter() {
-  const { dispachProducts, cats } = useContext(FrontContext);
+  const { dispachProducts, cats, cat, filtering, setSearch } =
+    useContext(FrontContext);
 
   const [sort, setSort] = useState('default');
-  const [cat, setCat] = useState(0);
+
+  const [s, setS] = useState('');
 
   const sorting = (e) => {
     setSort(e.target.value);
@@ -14,6 +16,11 @@ function SortFilter() {
       type: e.target.value,
     };
     dispachProducts(action);
+  };
+
+  const searching = (e) => {
+    setS(e.target.value);
+    setSearch(e.target.value);
   };
 
   return (
@@ -38,9 +45,6 @@ function SortFilter() {
                   <option value='ascPrice'>min-max Price</option>
                   <option value='descPrice'>max-min Price</option>
                 </select>
-                <small className='form-text text-muted'>
-                  Select sorting order here.
-                </small>
               </div>
             </div>
             <div className='col-4'>
@@ -49,7 +53,7 @@ function SortFilter() {
                 <select
                   className='form-control'
                   value={cat}
-                  onChange={(e) => setCat(e.target.value)}
+                  onChange={(e) => filtering(e.target.value)}
                 >
                   <option value='0'>All Categories</option>
                   {cats
@@ -60,9 +64,17 @@ function SortFilter() {
                       ))
                     : null}
                 </select>
-                <small className='form-text text-muted'>
-                  Select products Category here.
-                </small>
+              </div>
+            </div>
+            <div className='col-4'>
+              <div className='form-group'>
+                <label>Search</label>
+                <input
+                  className='form-control'
+                  type='text'
+                  value={s}
+                  onChange={searching}
+                />
               </div>
             </div>
           </div>

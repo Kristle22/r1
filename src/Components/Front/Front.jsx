@@ -11,16 +11,37 @@ function Front() {
   const [products, dispachProducts] = useReducer(productsReducer, []);
   const [cats, setCats] = useState(null);
 
-  // Read PRODUCTS
+  const [filter, setFilter] = useState(0);
+  const [cat, setCat] = useState(0);
+
+  const [search, setSearch] = useState('');
+
+  const filtering = (cid) => {
+    setCat(cid);
+    setFilter(parseInt(cid));
+  };
+
+  // Read PRODUCTS Filter
   useEffect(() => {
-    axios.get('http://localhost:3003/prekes', authConfig()).then((res) => {
-      const action = {
-        type: 'products_list',
-        payload: res.data,
-      };
-      dispachProducts(action);
-    });
-  }, [lastUpdate]);
+    let query;
+    if (filter === 0 && !search) {
+      query = '';
+    } else if (filter) {
+      query = '?cat-id=' + filter;
+    } else if (search) {
+      query = '?s=' + search;
+    }
+
+    axios
+      .get('http://localhost:3003/prekes' + query, authConfig())
+      .then((res) => {
+        const action = {
+          type: 'products_list',
+          payload: res.data,
+        };
+        dispachProducts(action);
+      });
+  }, [filter, search]);
 
   // Read CATS
   useEffect(() => {
@@ -30,7 +51,19 @@ function Front() {
   }, [lastUpdate]);
 
   return (
-    <FrontContext.Provider value={{ products, dispachProducts, cats }}>
+    <FrontContext.Provider
+      value={{
+        products,
+        dispachProducts,
+        cats,
+        setFilter,
+        filter,
+        cat,
+        setCat,
+        filtering,
+        setSearch,
+      }}
+    >
       <>
         <Nav />
         <div className='container'>

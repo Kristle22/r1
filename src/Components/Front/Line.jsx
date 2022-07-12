@@ -1,4 +1,9 @@
+import { useContext } from 'react';
+import FrontContext from './FrontContext';
+
 function Line({ line }) {
+  const { filtering } = useContext(FrontContext);
+
   return (
     <li className='list-group-item'>
       <div className='item'>
@@ -17,7 +22,9 @@ function Line({ line }) {
             style={{ backgroundColor: line.in_stock ? 'coral' : null }}
           ></div>
           <span>{new Date(Date.parse(line.lu)).toLocaleString()}</span>
-          <div className='cat'>{line.cat}</div>
+          <div className='cat' onClick={() => filtering(line.cid)}>
+            {line.cat}
+          </div>
         </div>
       </div>
     </li>
