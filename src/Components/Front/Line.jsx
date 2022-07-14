@@ -1,12 +1,21 @@
+import { useState } from 'react';
 import { useContext } from 'react';
 import FrontContext from './FrontContext';
 
 function Line({ line }) {
-  const { filtering } = useContext(FrontContext);
+  const { filtering, setCreateCom } = useContext(FrontContext);
+
+  const [com, setCom] = useState('');
+
+  const addComment = () => {
+    setCreateCom({ product_id: line.id, com });
+    setCom('');
+  };
+  // console.log(line);
 
   return (
     <li className='list-group-item'>
-      <div className='item'>
+      <div className='item front'>
         <div className='content'>
           <div style={{ width: '25%', margin: '10px' }}>
             {line.photo ? (
@@ -25,6 +34,32 @@ function Line({ line }) {
           <div className='cat' onClick={() => filtering(line.cid)}>
             {line.cat}
           </div>
+        </div>
+        <div className='comments'>
+          <h5>Comments</h5>
+          <ul className='list-group'>
+            {line.coms.map((c) => (
+              <li key={c.id} className='list-group-item'>
+                {c.com}
+              </li>
+            ))}
+          </ul>
+          <div className='form-group'>
+            <label>Add comment</label>
+            <textarea
+              className='form-control'
+              rows='3'
+              value={com}
+              onChange={(e) => setCom(e.target.value)}
+            ></textarea>
+          </div>
+          <button
+            type='button'
+            className='btn btn-outline-primary'
+            onClick={addComment}
+          >
+            Post comment
+          </button>
         </div>
       </div>
     </li>

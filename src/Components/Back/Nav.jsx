@@ -35,6 +35,15 @@ function Nav() {
               >
                 Products
               </NavLink>
+              <NavLink
+                to='/admin/comments'
+                className='nav-link'
+                style={({ isActive }) =>
+                  isActive ? { color: 'crimson' } : null
+                }
+              >
+                Comments
+              </NavLink>
               <Link to='/logout'>Logout</Link>
             </nav>
           </div>

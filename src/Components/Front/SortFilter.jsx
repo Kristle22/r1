@@ -5,7 +5,6 @@ import FrontContext from './FrontContext';
 function SortFilter() {
   const { dispachProducts, cats, cat, filtering, setSearch } =
     useContext(FrontContext);
-
   const [sort, setSort] = useState('default');
 
   const [s, setS] = useState('');

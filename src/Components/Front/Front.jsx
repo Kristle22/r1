@@ -16,6 +16,8 @@ function Front() {
 
   const [search, setSearch] = useState('');
 
+  const [createCom, setCreateCom] = useState(null);
+  console.log(search);
   const filtering = (cid) => {
     setCat(cid);
     setFilter(parseInt(cid));
@@ -35,13 +37,40 @@ function Front() {
     axios
       .get('http://localhost:3003/prekes' + query, authConfig())
       .then((res) => {
+        const products = new Map();
+        res.data.forEach((p) => {
+          let comment;
+          if (null === p.coms) {
+            comment = null;
+          } else {
+            comment = { id: p.com_id, com: p.coms };
+          }
+          if (products.has(p.id)) {
+            const prod = products.get(p.id);
+            if (comment) {
+              prod.coms.push(comment);
+            }
+          } else {
+            products.set(p.id, { ...p });
+            const prod = products.get(p.id);
+            prod.coms = [];
+            delete prod.com_id;
+            if (comment) {
+              prod.coms.push(comment);
+            }
+          }
+          console.log('PRODUCTS', products);
+          console.log('COMMENT', comment);
+        });
+
         const action = {
           type: 'products_list',
-          payload: res.data,
+          payload: [...products],
         };
+        console.log('Res Data', res.data);
         dispachProducts(action);
       });
-  }, [filter, search]);
+  }, [filter, search, lastUpdate]);
 
   // Read CATS
   useEffect(() => {
@@ -49,6 +78,17 @@ function Front() {
       setCats(res.data);
     });
   }, [lastUpdate]);
+
+  //Create COMMENT
+  useEffect(() => {
+    if (null === createCom) return;
+    axios
+      .post('http://localhost:3003/front/komentai', createCom, authConfig())
+      .then((res) => {
+        // showMessage(res.data.msg);
+        setLastUpdate(Date.now());
+      });
+  }, [createCom]);
 
   return (
     <FrontContext.Provider
@@ -62,6 +102,7 @@ function Front() {
         setCat,
         filtering,
         setSearch,
+        setCreateCom,
       }}
     >
       <>

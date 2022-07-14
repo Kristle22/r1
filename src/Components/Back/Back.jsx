@@ -6,6 +6,7 @@ import BackContext from './BackContext';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { authConfig } from '../../Functions/auth';
+import ComsCrud from './Coms/Crud';
 
 function Back({ show }) {
   const [lastUpdate, setLastUpdate] = useState(Date.now());
@@ -33,6 +34,9 @@ function Back({ show }) {
     // },
     // { id: 8490, text: 'Sveikiname isigijus megstama preke!', type: 'success' },
   ]);
+
+  const [comments, setComments] = useState(null);
+  const [deleteCom, setDeleteCom] = useState(null);
 
   // Read PRODUCTS
   useEffect(() => {
@@ -172,6 +176,32 @@ function Back({ show }) {
       });
   }, [editCat]);
 
+  // Read COMMENTS
+  useEffect(() => {
+    axios
+      .get('http://localhost:3003/adm/komentai', authConfig())
+      .then((res) => {
+        setComments(res.data);
+      });
+  }, [lastUpdate]);
+
+  //Delete COMMENTS
+  useEffect(() => {
+    if (null === deleteCom) return;
+    axios
+      .delete(
+        'http://localhost:3003/adm/komentai/' + deleteCom.id,
+        authConfig()
+      )
+      .then((res) => {
+        showMessage(res.data.msg);
+        setLastUpdate(Date.now());
+      })
+      .catch((error) => {
+        showMessage({ text: error.message, type: 'danger' });
+      });
+  }, [deleteCom]);
+
   const showMessage = (m) => {
     const id = uuidv4();
     m.id = id;
@@ -199,6 +229,8 @@ function Back({ show }) {
         modalProduct,
         setModalProduct,
         setDeleteImg,
+        setDeleteCom,
+        comments,
       }}
     >
       {show === 'admin' ? (
@@ -210,6 +242,8 @@ function Back({ show }) {
         <CatsCrud />
       ) : show === 'products' ? (
         <ProductsCrud />
+      ) : show === 'comments' ? (
+        <ComsCrud />
       ) : null}
     </BackContext.Provider>
   );

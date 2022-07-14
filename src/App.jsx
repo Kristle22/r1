@@ -47,6 +47,14 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path='/admin/comments'
+          element={
+            <RequireAuth role='admin'>
+              <Back show='comments' />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
