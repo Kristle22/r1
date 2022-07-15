@@ -25,7 +25,15 @@ function Line({ line }) {
             ) : null}
           </div>
           <b>{line.title}</b>
-          <b>{line.price.toFixed(2)} Eur.</b>
+          <b>
+            {line.curCode ? (
+              <i>
+                {line.curVal} {line.curCode}
+              </i>
+            ) : (
+              <i>{line.price.toFixed(2)} USD.</i>
+            )}
+          </b>
           <div
             className='box'
             style={{ backgroundColor: line.in_stock ? 'coral' : null }}

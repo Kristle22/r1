@@ -17,7 +17,10 @@ function Front() {
   const [search, setSearch] = useState('');
 
   const [createCom, setCreateCom] = useState(null);
-  console.log(search);
+
+  const [cur, setCur] = useState(null);
+  const [curRate, setCurRate] = useState(null);
+
   const filtering = (cid) => {
     setCat(cid);
     setFilter(parseInt(cid));
@@ -90,6 +93,30 @@ function Front() {
       });
   }, [createCom]);
 
+  //GET CURRENCY
+  useEffect(() => {
+    axios
+      .get('http://localhost:3003/valiuta', authConfig())
+      .then((res) => setCur(res.data));
+  }, []);
+  console.log('Valiuta', cur);
+
+  useEffect(() => {
+    if (null === curRate) return;
+
+    const value = cur.filter((c) => c.code === curRate)[0].value;
+    const action = {
+      type: 'currency_price',
+      payload: products.map((pr) => ({
+        ...pr,
+        curCode: curRate,
+        curVal: pr.price * value,
+      })),
+    };
+    dispachProducts(action);
+  }, [curRate, cur, products]);
+  console.log('Prekes', products, curRate);
+
   return (
     <FrontContext.Provider
       value={{
@@ -103,6 +130,8 @@ function Front() {
         filtering,
         setSearch,
         setCreateCom,
+        cur,
+        setCurRate,
       }}
     >
       <>

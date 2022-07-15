@@ -8,8 +8,22 @@ import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { login, logout, authConfig } from './Functions/auth';
+import { apikey } from './Functions/key';
 
 function App() {
+  // POST => PUT CURRENCY
+  useEffect(() => {
+    if (false) {
+      axios
+        .get('https://api.currencyapi.com/v3/latest?apikey=' + apikey)
+        .then((res) => {
+          axios
+            .post('http://localhost:3003/adm/valiuta', res.data, authConfig())
+            .then((rs) => console.log(rs));
+        });
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

@@ -3,6 +3,9 @@ function productsReducer(state, action) {
   switch (action.type) {
     case 'products_list':
       newState = action.payload.map(pr => pr[1]).map((p, i) => ({ ...p, row: i }));
+      break;
+    case 'currency_price':
+      newState = action.payload;
       console.log('PAYLOAD', action.payload);
       console.log('NEW STATE', newState);
       break;

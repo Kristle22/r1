@@ -3,11 +3,13 @@ import { useContext } from 'react';
 import FrontContext from './FrontContext';
 
 function SortFilter() {
-  const { dispachProducts, cats, cat, filtering, setSearch } =
+  const { dispachProducts, cats, cat, filtering, setSearch, cur, setCurRate } =
     useContext(FrontContext);
   const [sort, setSort] = useState('default');
 
   const [s, setS] = useState('');
+
+  const [curSelect, setCurSelect] = useState('USD');
 
   const sorting = (e) => {
     setSort(e.target.value);
@@ -20,6 +22,11 @@ function SortFilter() {
   const searching = (e) => {
     setS(e.target.value);
     setSearch(e.target.value);
+  };
+
+  const selectCurrency = (code) => {
+    setCurSelect(code);
+    setCurRate(code);
   };
 
   return (
@@ -59,6 +66,23 @@ function SortFilter() {
                     ? cats.map((c) => (
                         <option key={c.id} value={c.id}>
                           {c.title}
+                        </option>
+                      ))
+                    : null}
+                </select>
+              </div>
+              <div className='form-group'>
+                <label>Currency</label>
+                <select
+                  className='form-control'
+                  value={curSelect}
+                  onChange={(e) => selectCurrency(e.target.value)}
+                >
+                  <option value='0'>Select Currency</option>
+                  {cur
+                    ? cur.map((c) => (
+                        <option key={c.id} value={c.code}>
+                          {c.code}
                         </option>
                       ))
                     : null}
